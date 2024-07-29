@@ -7,7 +7,7 @@ const { MongoClient } = require('mongodb');
 
 const connectToDb = async () => {
     try {
-        mongoose.connect(keys.mongoLocalURI, {
+        mongoose.connect(keys.mongoServerURI, {
 
         });
     } catch (error) {
