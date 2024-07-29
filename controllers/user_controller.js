@@ -21,7 +21,7 @@ function updateSocketId(socket, io) {
                 true
         }
     }).then((data) => {
-        io.emit("/user_status" + socket.data.userId, false)
+        io.emit("/user_status" + socket.data.userId, true)
 
     }).catch((error) => {
         if (error) return console.log(error);
@@ -56,16 +56,18 @@ function checkPendingMessage(socket) {
 }
 const disconnectUser = (socket, io) => {
     User
-        .findByIdAndUpdate(socket.data.userId, {
-            $set: {
-                socketId: "",
-                Onlinestatus: false
-            }
-        }).then((data) => {
-            io.emit("/user_status" + socket.data.userId, false)
-        }).catch((error) => {
-            if (error) return console.log(error);
-        })
+        .findByIdAndUpdate(socket.data.userId, 
+            {$set:{socketId: "",Onlinestatus: false, lastSeen: Date.now()}}
+            ,
+            {
+                new: true
+            }            
+        ).then((data) => {
+    console.log("data : ", data)
+    io.emit("/user_status" + socket.data.userId, false)
+}).catch((error) => {
+    if (error) return console.log(error);
+})
 }
 
 
